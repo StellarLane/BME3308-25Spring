@@ -8,6 +8,7 @@ extern int plane_x;
 extern int plane_vx;
 extern int plane_life;
 extern int current_game_state;
+extern Obstacle obstacles[10];
 
 void init_plane() {
     plane_x = 120;
@@ -34,6 +35,25 @@ void check_plane_crash(int upper, int lower) {
             init_plane();
         }
     }
+    int i;
+    for (i = 0; i < 10; i++) {
+        if (obstacles[i].active && 
+            obstacles[i].x > 120  - obstacles[i].width &&
+            obstacles[i].x < 120  + obstacles[i].width &&
+            plane_x > obstacles[i].y &&
+            plane_x < obstacles[i].y + obstacles[i].height + 8) {
+            plane_life--;
+            if (plane_life <= 0) {
+                current_game_state = 2; // Game over state
+            } else {
+                // Reset plane position and velocity
+                init_plane();
+            }
+            break;
+        }
+
+    }
+
 }
 
 void update_plane() {
@@ -49,7 +69,7 @@ void update_plane() {
     } else if (plane_x > TFT_XSIZE - 16) {
         plane_x = TFT_XSIZE - 16; // Prevent going off the right edge
     }
-    check_plane_crash(220, 20);
+    check_plane_crash(220, 10);
     // Display plane at new position
     etft_DisplayString("Plane", TFT_YSIZE / 4, plane_x, etft_Color(255, 0, 0), etft_Color(0, 0, 0));
 }

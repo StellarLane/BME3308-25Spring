@@ -7,6 +7,8 @@ void init_GIPO();
 // show plane's life through LED
 void update_led(int life);
 
+void init_TimerA();
+
 // set the area of [startX, startY] to [endX, endY] with the specified color
 void etft_AreaSet(uint16_t startX, uint16_t startY, uint16_t endX, uint16_t endY, uint16_t color);
 
@@ -23,5 +25,18 @@ void update_plane();
 void check_plane_crash(int upper, int lower);
 
 typedef struct {
-    
+    int x;
+    int y;
+    int width;
+    int height;
+    int v;
+    int active;
 } Obstacle;
+
+void initiate_obstacles();
+
+void update_obstacles();
+
+void initiate_obstacle();
+
+void try_lauch_obstacle();

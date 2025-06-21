@@ -9,6 +9,7 @@ CG_TOOL_ROOT := C:/ti_53/ccsv5/tools/compiler/msp430_4.1.2
 ORDERED_OBJS += \
 $(GEN_CMDS__FLAG) \
 "./include/tft_plane.obj" \
+"./include/tft_obstacle.obj" \
 "./include/tft_base.obj" \
 "./include/tft.obj" \
 "./include/helper.obj" \
@@ -128,8 +129,8 @@ prj_2.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
 # Other Targets
 clean:
 	-$(RM) $(MSP430_EXECUTABLE_OUTPUTS__QUOTED) "prj_2.out"
-	-$(RM) "main.pp" "include\helper.pp" "include\tft.pp" "include\tft_base.pp" "include\tft_plane.pp" 
-	-$(RM) "main.obj" "include\helper.obj" "include\tft.obj" "include\tft_base.obj" "include\tft_plane.obj" 
+	-$(RM) "main.pp" "include\helper.pp" "include\tft.pp" "include\tft_base.pp" "include\tft_obstacle.pp" "include\tft_plane.pp" 
+	-$(RM) "main.obj" "include\helper.obj" "include\tft.obj" "include\tft_base.obj" "include\tft_obstacle.obj" "include\tft_plane.obj" 
 	-@echo 'Finished clean'
 	-@echo ' '
 

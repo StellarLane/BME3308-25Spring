@@ -35,6 +35,12 @@ void init_clock()
   UCSCTL4 = SELA__XT1CLK + SELS__DCOCLK + SELM__DCOCLK;
 }
 
+void init_timerA(void) {
+    TA0CTL |= MC_1 + TASSEL_2 + TACLR; // 选择SMCLK为时钟源，设置为增计数模式，清零计数器
+    TA0CCTL0 = CCIE;                   // 使能CCR0的中断
+    TA0CCR0  = 50000;                  // 设置计数上限为50000，到达时产生中断
+}
+
 // init button and led
 void init_GIPO() {
     P4DIR |= BIT5 | BIT6 | BIT7; // Set P4.5, P4.6, P4.7 as output (LEDs)
@@ -98,8 +104,9 @@ void rules() {
     etft_DisplayString("Game Rules:", 10, 10, etft_Color(255, 255, 255), etft_Color(0, 0, 0)); // Display game rules
     etft_DisplayString("1. Avoid obstacles", 10, 30, etft_Color(255, 255, 255), etft_Color(0, 0, 0)); 
     etft_DisplayString("2. Use S6 to go down", 10, 50, etft_Color(255, 255, 255), etft_Color(0, 0, 0)); // Display instruction
-    etft_DisplayString("3. Use S5 to go up and S4 to go even faster", 10, 70, etft_Color(255, 255, 255), etft_Color(0, 0, 0)); // Display instruction
-    etft_DisplayString("4. Press any key to return", 10, 90, etft_Color(255, 255, 255), etft_Color(0, 0, 0)); // Display instruction
+    etft_DisplayString("3. Use S5 to go up", 10, 70, etft_Color(255, 255, 255), etft_Color(0, 0, 0)); // Display instruction
+    etft_DisplayString("   and S4 to go even faster", 10, 90, etft_Color(255, 255, 255), etft_Color(0, 0, 0)); // Display instruction
+    etft_DisplayString("4. Press any key to return", 10, 110, etft_Color(255, 255, 255), etft_Color(0, 0, 0)); // Display instruction
 }
 
 void welcome_message() {
@@ -117,6 +124,7 @@ void game_over() {
     char high_score_str[20];
     if (current_score > high_score) {
         sprintf(high_score_str, "New High Score!");
+        high_score = current_score; // Update high score if current score is higher
     } else {
         sprintf(high_score_str, "High Score: %d", high_score); // Format high score string
     }
@@ -141,6 +149,7 @@ void button_handler(unsigned int pin) {
             current_game_state = 1; // Start game
             break;
         case 5:
+            etft_AreaSet(0, 0, TFT_XSIZE - 1, TFT_YSIZE - 1, 0x0000); // Clear screen
             current_game_state = -1; // Show rules
             break;
         default:
@@ -151,13 +160,13 @@ void button_handler(unsigned int pin) {
         switch (pin)
         {
         case 4:
-            plane_vx += 2; // Increase velocity
+            plane_vx -= 2; // Increase velocity
             break;
         case 5:
-            plane_vx += 1; // Increase velocity
+            plane_vx -= 1; // Increase velocity
             break;
         case 6:
-            plane_vx -= 1; // Decrease velocity
+            plane_vx += 1; // Decrease velocity
             break;
         case 7:
             current_game_state = 2;
@@ -173,4 +182,13 @@ void button_handler(unsigned int pin) {
     default:
         break;
     }
+}
+
+int get_adc_noise() {
+    ADC12CTL0 = ADC12SHT0_2 | ADC12ON;      // 打开ADC
+    ADC12CTL1 = ADC12SHP;                   // 使用采样保持脉冲模式
+    ADC12MCTL0 = ADC12INCH_5;               // 选择A5通道（假设A5悬空）
+    ADC12CTL0 |= ADC12ENC | ADC12SC;        // 启动转换
+    while (ADC12CTL1 & ADC12BUSY);          // 等待转换完成
+    return ADC12MEM0;                       // 返回采样值
 }

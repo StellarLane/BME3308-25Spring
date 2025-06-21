@@ -1,1 +1,1 @@
-"./include/tft_plane.obj" "./include/tft_base.obj" "./include/tft.obj" "./include/helper.obj" "./main.obj" -l"libc.a" "../lnk_msp430f6638.cmd" 
+"./include/tft_plane.obj" "./include/tft_obstacle.obj" "./include/tft_base.obj" "./include/tft.obj" "./include/helper.obj" "./main.obj" -l"libc.a" "../lnk_msp430f6638.cmd" 
