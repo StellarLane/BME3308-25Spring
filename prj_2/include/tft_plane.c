@@ -9,6 +9,8 @@ extern int plane_vx;
 extern int plane_life;
 extern int current_game_state;
 extern Obstacle obstacles[10];
+extern Obstacle boss_obstacles[5];
+extern Obstacle boss_skill_obstacles[5];
 
 void init_plane() {
     plane_x = 120;
@@ -32,28 +34,62 @@ void check_plane_crash(int upper, int lower) {
             current_game_state = 2; // Game over state
         } else {
             // Reset plane position and velocity
+            clear_obstacles();
             init_plane();
         }
     }
     int i;
     for (i = 0; i < 10; i++) {
         if (obstacles[i].active && 
-            obstacles[i].x > 120  - obstacles[i].width &&
-            obstacles[i].x < 120  + obstacles[i].width &&
-            plane_x > obstacles[i].y &&
-            plane_x < obstacles[i].y + obstacles[i].height + 8) {
+            obstacles[i].x > 80  - obstacles[i].width &&
+            obstacles[i].x < 120 &&
+            obstacles[i].y < plane_x + 16 &&
+            obstacles[i].y + obstacles[i].height > plane_x) {
             plane_life--;
             if (plane_life <= 0) {
                 current_game_state = 2; // Game over state
             } else {
                 // Reset plane position and velocity
+                clear_obstacles();
                 init_plane();
             }
             break;
         }
-
     }
-
+    for (i = 0; i < 5; i++) {
+        if (boss_obstacles[i].active && 
+            boss_obstacles[i].x > 80  - boss_obstacles[i].width &&
+            boss_obstacles[i].x < 120 &&
+            boss_obstacles[i].y < plane_x + 16 &&
+            boss_obstacles[i].y + boss_obstacles[i].height > plane_x) {
+            plane_life--;
+            if (plane_life <= 0) {
+                current_game_state = 2; // Game over state
+            } else {
+                // Reset plane position and velocity
+                clear_boss_obstacles();
+                init_plane();
+            }
+            break;
+        }
+    }
+    for (i = 0; i < 5; i++) {
+        if (boss_skill_obstacles[i].active && 
+            boss_skill_obstacles[i].x > 80  - boss_skill_obstacles[i].width &&
+            boss_skill_obstacles[i].x < 120 &&
+            boss_skill_obstacles[i].y < plane_x + 16 &&
+            boss_skill_obstacles[i].y + boss_skill_obstacles[i].height > plane_x) {
+            plane_life--;
+            if (plane_life <= 0) {
+                current_game_state = 2; // Game over state
+            } else {
+                // Reset plane position and velocity
+                clear_boss_skill_obstacles();
+                init_plane();
+            }
+            break;
+        }
+    }
 }
 
 void update_plane() {

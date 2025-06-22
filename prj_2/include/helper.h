@@ -39,4 +39,21 @@ void update_obstacles();
 
 void initiate_obstacle();
 
-void try_lauch_obstacle();
+void try_launch_obstacle();
+
+void show_status();
+
+void clear_obstacles();
+
+typedef struct Boss
+{
+    int x;
+    int y;
+    int width;
+    int hp;
+    int active;
+} Boss;
+
+void init_boss();
+
+void update_boss();

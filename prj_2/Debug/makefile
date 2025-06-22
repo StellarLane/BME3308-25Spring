@@ -13,6 +13,7 @@ $(GEN_CMDS__FLAG) \
 "./include/tft_base.obj" \
 "./include/tft.obj" \
 "./include/helper.obj" \
+"./include/dr_lcdseg.obj" \
 "./main.obj" \
 -l"libc.a" \
 "../lnk_msp430f6638.cmd" \
@@ -129,8 +130,8 @@ prj_2.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
 # Other Targets
 clean:
 	-$(RM) $(MSP430_EXECUTABLE_OUTPUTS__QUOTED) "prj_2.out"
-	-$(RM) "main.pp" "include\helper.pp" "include\tft.pp" "include\tft_base.pp" "include\tft_obstacle.pp" "include\tft_plane.pp" 
-	-$(RM) "main.obj" "include\helper.obj" "include\tft.obj" "include\tft_base.obj" "include\tft_obstacle.obj" "include\tft_plane.obj" 
+	-$(RM) "main.pp" "include\dr_lcdseg.pp" "include\helper.pp" "include\tft.pp" "include\tft_base.pp" "include\tft_obstacle.pp" "include\tft_plane.pp" 
+	-$(RM) "main.obj" "include\dr_lcdseg.obj" "include\helper.obj" "include\tft.obj" "include\tft_base.obj" "include\tft_obstacle.obj" "include\tft_plane.obj" 
 	-@echo 'Finished clean'
 	-@echo ' '
 
